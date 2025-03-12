@@ -69,34 +69,25 @@ server.tool(
 
 // Set up Express server with SSE transport
 const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Middleware to parse JSON bodies
-app.use(express.json());
+const PORT = process.env.PORT || 62886;
+let transport: SSEServerTransport;
 
 // SSE endpoint
 app.get('/sse', async (req, res) => {
-  res.setHeader('Content-Type', 'text/event-stream');
-  res.setHeader('Cache-Control', 'no-cache');
-  res.setHeader('Connection', 'keep-alive');
   
-  const transport = new SSEServerTransport('/messages', res);
+  transport = new SSEServerTransport('/messages', res);
   await server.connect(transport);
 });
 
 // Message endpoint for clients to send messages
 app.post('/messages', async (req, res) => {
   try {
-    // This is a simplified implementation - in a real app, you'd need to
-    // route messages to the correct transport instance
-    const message = req.body;
-    
-    // In a real implementation, you would need to handle this properly
-    // This is just a placeholder
-    res.status(200).json({ status: 'message received' });
+    // Note: to support multiple simultaneous connections, these messages will
+    // need to be routed to a specific matching transport. (This logic isn't
+    // implemented here, for simplicity.)
+    await transport.handlePostMessage(req, res);
   } catch (error) {
     console.error('Error processing message:', error);
-    res.status(500).json({ error: 'Failed to process message' });
   }
 });
 

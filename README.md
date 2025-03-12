@@ -28,6 +28,23 @@ bun run build
 bun run dev
 ```
 
+## Testing with MCP Inspector
+
+The project includes support for the [MCP Inspector](https://github.com/modelcontextprotocol/inspector), which is a tool for testing and debugging MCP servers.
+
+```bash
+# Run the server with MCP Inspector
+bun run inspect
+```
+
+The `inspect` script uses `npx` to run the MCP Inspector, which will launch a web interface in your browser for interacting with your MCP server.
+
+This will allow you to:
+- Explore available tools and resources
+- Test tool calls with different parameters
+- View the server's responses
+- Debug your MCP server implementation
+
 ## Usage
 
 The server exposes two endpoints:

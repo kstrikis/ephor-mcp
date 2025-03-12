@@ -9,7 +9,10 @@
     "start": "node dist/index.js",
     "dev": "tsx src/index.ts",
     "lint": "eslint src --ext .ts",
-    "test": "jest"
+    "test": "jest",
+    "inspect": "npx @modelcontextprotocol/inspector node dist/index.js",
+    "inspect:dev": "npx @modelcontextprotocol/inspector tsx src/index.ts --stdio",
+    "inspect:build": "npm run build && npm run inspect"
   },
   "keywords": [
     "mcp",
@@ -23,6 +26,7 @@
     "@modelcontextprotocol/sdk": "^1.7.0"
   },
   "devDependencies": {
+    "@modelcontextprotocol/inspector": "^0.6.0",
     "@types/express": "^5.0.0",
     "@types/node": "^22.13.10",
     "express": "^4.21.2",
