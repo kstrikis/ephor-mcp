@@ -87,3 +87,64 @@ const result = await client.callTool({
 ## License
 
 MIT 
+
+## Deployment to EC2
+
+This project includes Docker configuration for easy deployment to EC2 or any other server environment.
+
+### Prerequisites
+
+- An EC2 instance running Amazon Linux 2 or Ubuntu
+- Security group configured to allow inbound traffic on port 62886
+- SSH access to the instance
+
+### Deployment Steps
+
+1. Clone the repository to your EC2 instance:
+   ```bash
+   git clone <your-repository-url>
+   cd <repository-directory>
+   ```
+
+2. Make the deployment script executable:
+   ```bash
+   chmod +x deploy.sh
+   ```
+
+3. Run the deployment script:
+   ```bash
+   ./deploy.sh
+   ```
+
+The script will:
+- Install Docker and Docker Compose if they're not already installed
+- Build the Docker image
+- Start the container in detached mode
+- Display the public URL where your MCP server is accessible
+
+### Manual Deployment
+
+If you prefer to deploy manually:
+
+1. Build the Docker image:
+   ```bash
+   docker-compose build
+   ```
+
+2. Start the container:
+   ```bash
+   docker-compose up -d
+   ```
+
+3. Verify the container is running:
+   ```bash
+   docker-compose ps
+   ```
+
+### Accessing the Server
+
+Once deployed, your MCP server will be accessible at:
+- `http://<ec2-public-ip>:62886/sse` - SSE endpoint
+- `http://<ec2-public-ip>:62886/messages` - Messages endpoint
+
+Make sure port 62886 is open in your EC2 security group! 

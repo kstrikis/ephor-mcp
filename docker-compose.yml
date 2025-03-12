@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  mcp-server:
+    build: .
+    ports:
+      - "62886:62886"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=62886 
