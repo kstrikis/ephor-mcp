@@ -2,8 +2,10 @@ FROM node:22-alpine
 
 WORKDIR /app
 
+# Install required packages
+RUN apk add --no-cache curl unzip bash
+
 # Install Bun
-RUN apk add --no-cache curl unzip
 RUN curl -fsSL https://bun.sh/install | bash
 ENV PATH="/root/.bun/bin:${PATH}"
 

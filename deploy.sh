@@ -3,19 +3,37 @@
 # Exit on any error
 set -e
 
+# Detect the Linux distribution
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    OS=$NAME
+fi
+
 # Check if Docker is installed
 if ! command -v docker &> /dev/null; then
     echo "Docker is not installed. Installing Docker..."
-    sudo apt-get update
-    sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-    sudo apt-get update
-    sudo apt-get install -y docker-ce
-    sudo systemctl enable docker
-    sudo systemctl start docker
+    
+    if [[ "$OS" == *"Amazon Linux"* ]]; then
+        # Amazon Linux installation
+        sudo yum update -y
+        sudo yum install -y docker
+        sudo systemctl enable docker
+        sudo systemctl start docker
+    else
+        # Ubuntu installation
+        sudo apt-get update
+        sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+        sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+        sudo apt-get update
+        sudo apt-get install -y docker-ce
+        sudo systemctl enable docker
+        sudo systemctl start docker
+    fi
+    
     sudo usermod -aG docker $USER
     echo "Docker installed successfully!"
+    echo "NOTE: You may need to log out and log back in for group changes to take effect."
 fi
 
 # Check if docker-compose is installed
@@ -27,10 +45,10 @@ if ! command -v docker-compose &> /dev/null; then
 fi
 
 echo "Building Docker image..."
-docker-compose build
+sudo docker-compose build
 
 echo "Starting Docker container..."
-docker-compose up -d
+sudo docker-compose up -d
 
 # Get the EC2 public IP address
 PUBLIC_IP=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)
